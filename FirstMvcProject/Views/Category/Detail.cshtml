@@ -4,7 +4,10 @@
 *@
 @{
 }
-<h2 style="color:red; text-align:center">Category Detail</h2>
+<h2 style="color:black; text-align:center">Category Detail</h2>
+
+<a asp-action="Delete" asp-controller="Category" asp-route-id=@Model.CategoryId class="btn btn-danger">Kategoriyi Sil</a>
+<a asp-action="Update" asp-controller="Category" asp-route-id=@Model.CategoryId class="btn btn-warning">Kategoriyi Güncelle</a>
 
 <h1>@Model.CategoryName</h1>
 <h3>@Model.Description</h3>
@@ -25,14 +28,14 @@
             <tbody>
                 @foreach (var item in Model.Products)
                 {
-                <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.UnitPrice</td>
-                    <td>@item.Category.CategoryName</td>
-                    <td>@item.OrderDetails.Count</td>
-                    <td>@item.OrderDetails.Sum(x=> x.UnitPrice * x.Quantity* (decimal)(1-x.Discount))</td>
-                    <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-info">Detay</a></td>
-                </tr>
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.UnitPrice</td>
+                        <td>@item.Category.CategoryName</td>
+                        <td>@item.OrderDetails.Count</td>
+                        <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
+                        <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-info">Detay</a></td>
+                    </tr>
                 }
             </tbody>
         </table>

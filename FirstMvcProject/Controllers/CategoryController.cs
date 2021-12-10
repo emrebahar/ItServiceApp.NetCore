@@ -70,5 +70,62 @@ namespace FirstMvcProject.Controllers
                 return View(model);
             }
         }
+
+        public IActionResult Delete(int? id)
+        {
+            var deleteCategory = _northwindContext.Categories.FirstOrDefault(x => x.CategoryId == id);
+
+            try
+            {
+                _northwindContext.Categories.Remove(deleteCategory);
+                _northwindContext.SaveChanges();
+            }
+            catch (System.Exception)
+            {
+                return RedirectToAction("Detail", new { id = id });
+            }
+            TempData["Silinen Kategori"] = deleteCategory.CategoryName;
+            return RedirectToAction("Index");
+
+        }
+        public IActionResult Update(int id)
+        {
+
+            var updateCategory = _northwindContext.Categories.FirstOrDefault(x => x.CategoryId == id);
+            if (updateCategory == null)
+            {
+                return RedirectToAction("Index");
+            }
+            var model = new CategoryViewModel()
+            {
+                CategoryID = updateCategory.CategoryId,
+                CategoryName = updateCategory.CategoryName,
+                Description = updateCategory.Description
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Update(CategoryViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var updateCategory = _northwindContext.Categories.FirstOrDefault(x => x.CategoryId == model.CategoryID);
+
+            try
+            {
+                updateCategory.CategoryName = model.CategoryName;
+                updateCategory.Description = model.Description;
+                _northwindContext.Update(updateCategory);
+                _northwindContext.SaveChanges();
+                return RedirectToAction("Detail", new { id = updateCategory.CategoryId });
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError(string.Empty, $"{model.CategoryName } Güncellenirken bir hata oluştu. Tekrar deneyiniz");
+            }
+            return View(model);
+        }
     }
 }

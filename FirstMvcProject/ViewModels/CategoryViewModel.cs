@@ -9,6 +9,7 @@ namespace FirstMvcProject.ViewModels
 {
     public class CategoryViewModel
     {
+        public int CategoryID { get; set; }
         [Required(ErrorMessage ="Kategori Alanı Gereklidir."),StringLength(15,ErrorMessage ="Ad Alanı En Fazla 15 Karakter olabilir!")]
         [Display(Name = "Kategori Adı")]
         public string CategoryName { get; set; }

@@ -1,7 +1,16 @@
 ﻿@model List<Category>
+@{
+    var deleteMessage = @TempData["Silinen Kategori"]?.ToString();
+}
+<h2 style="color:black; text-align:center">Category</h2>
 
-<h2 style="color:red; text-align:center">Category</h2>
-<a asp-action="Create" asp-controller="Category" class="btn btn-success">Ekle</a>
+@if (!string.IsNullOrEmpty(deleteMessage))
+{
+    <h3 style="color:red">@deleteMessage isimli Kategori Silinmiştir.</h3>
+}
+
+<a asp-action="Create" asp-controller="Category" class="btn btn-success">Kategori Ekle</a>
+
 <div class="row">
     <div class="col-6">
         <table class="table-bordered">
