@@ -1,0 +1,33 @@
+﻿@model Product
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<h2 style="color:red; text-align:center">Product Detail</h2>
+<div class="container">
+    <div class="row">
+        <table class="table-bordered ">
+            <thead>
+                <tr>
+                    <th>< ProductID ></th>
+                    <th>< ProductName ></th>
+                    <th>< QuantitiyPerUnit ></th>
+                    <th>< UnitPrice ></th>
+                </tr>
+            </thead>
+            <tbody style="text-align:center">
+                <tr>
+                    <td>@Model.ProductId</td>
+                    <td>@Model.ProductName</td>
+                    <td>@Model.QuantityPerUnit</td>
+                    <td>@Model.UnitPrice</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br />
+    <div class="col-2">
+        <a asp-controller="Category" asp-action="Detail" asp-route-id="@Model.CategoryId" class="btn btn-danger">Geri</a>
+    </div>
+</div>
