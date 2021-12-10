@@ -43,7 +43,6 @@ namespace FirstMvcProject.Controllers
         }
         public IActionResult Create()
         {
-
             return View();
         }
         [HttpPost]
@@ -98,7 +97,7 @@ namespace FirstMvcProject.Controllers
             }
             var model = new CategoryViewModel()
             {
-                CategoryID = updateCategory.CategoryId,
+                CategoryId = updateCategory.CategoryId,
                 CategoryName = updateCategory.CategoryName,
                 Description = updateCategory.Description
             };
@@ -111,21 +110,22 @@ namespace FirstMvcProject.Controllers
             {
                 return View(model);
             }
-            var updateCategory = _northwindContext.Categories.FirstOrDefault(x => x.CategoryId == model.CategoryID);
+            var updateCategory = _northwindContext.Categories.FirstOrDefault(x => x.CategoryId == model.CategoryId);
 
             try
             {
                 updateCategory.CategoryName = model.CategoryName;
                 updateCategory.Description = model.Description;
-                _northwindContext.Update(updateCategory);
+                _northwindContext.Categories.Update(updateCategory);
                 _northwindContext.SaveChanges();
                 return RedirectToAction("Detail", new { id = updateCategory.CategoryId });
             }
             catch (System.Exception)
             {
                 ModelState.AddModelError(string.Empty, $"{model.CategoryName } Güncellenirken bir hata oluştu. Tekrar deneyiniz");
+                return View(model);
             }
-            return View(model);
+
         }
     }
 }
