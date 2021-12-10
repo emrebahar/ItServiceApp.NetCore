@@ -1,4 +1,5 @@
 ﻿using FirstMvcProject.Models;
+using FirstMvcProject.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -14,15 +15,15 @@ namespace FirstMvcProject.Controllers
         }
         public IActionResult Index()
         {
-            var data = _northwindContext.Categories.Include(x=>x.Products).OrderBy(x=> x.CategoryName).ToList();
+            var data = _northwindContext.Categories.Include(x => x.Products).OrderBy(x => x.CategoryName).ToList();
             return View(data);
         }
         public IActionResult Detail(int id)
         {
             var category = _northwindContext.Categories
-                .Include(x=> x.Products)
-                .ThenInclude(x=> x.OrderDetails)
-                .ThenInclude(x=>x.Order)
+                .Include(x => x.Products)
+                .ThenInclude(x => x.OrderDetails)
+                .ThenInclude(x => x.Order)
                 .FirstOrDefault(x => x.CategoryId == id);
 
             //********* 2. YOL *********
@@ -42,14 +43,32 @@ namespace FirstMvcProject.Controllers
         }
         public IActionResult Create()
         {
-            
+
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Category category)
+        public IActionResult Create(CategoryViewModel model)
         {
-
-            return View();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var category = new Category()
+            {
+                CategoryName = model.CategoryName,
+                Description = model.Description
+            };
+            _northwindContext.Categories.Add(category);
+            try
+            {
+                _northwindContext.SaveChanges();
+                return RedirectToAction("Detail", new { id = category.CategoryId });
+            }
+            catch (System.Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"{model.CategoryName} eklenirken bir hata oluştu Tekrar deneyiniz.");
+                return View(model);
+            }
         }
     }
 }
