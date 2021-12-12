@@ -75,5 +75,51 @@ namespace FirstMvcProject.Controllers
             TempData["Silinen Çalışan"] = deleteEmploye.FirstName + " " + deleteEmploye.LastName;
             return RedirectToAction("Index");
         }
+        public IActionResult Update(int id)
+        {
+            var updateEmploye = _northwindContext.Employees.FirstOrDefault(x => x.EmployeeId == id);
+            if (updateEmploye == null)
+            {
+                return RedirectToAction("Index");
+            }
+            var model = new EmployeeViewModel()
+            {
+                EmployeeId = updateEmploye.EmployeeId,
+                FirsName = updateEmploye.FirstName,
+                LastName = updateEmploye.LastName,
+                Title = updateEmploye.Title,
+                City = updateEmploye.City,
+                Adress = updateEmploye.Address,
+                BirthDate = updateEmploye.BirthDate
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Update(EmployeeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var updateEmploye = _northwindContext.Employees.FirstOrDefault(x => x.EmployeeId == model.EmployeeId);
+            try
+            {
+                updateEmploye.FirstName = model.FirsName;
+                updateEmploye.LastName = model.LastName;
+                updateEmploye.Title = model.Title;
+                updateEmploye.City = model.City;
+                updateEmploye.Address = model.Adress;
+                updateEmploye.BirthDate = model.BirthDate;
+                _northwindContext.Employees.Update(updateEmploye);
+                _northwindContext.SaveChanges();
+                return RedirectToAction("Detail", new { id = updateEmploye.EmployeeId });
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, $"{model.FirsName + model.LastName } Güncellenirken bir hata oluştu. Tekrar deneyiniz");
+                return View(model);
+            }
+        }
     }
+
 }
