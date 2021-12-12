@@ -1,0 +1,29 @@
+﻿@model EmployeeViewModel
+
+
+<form asp-action="Create" asp-controller="Employee" method="post" class="mt-3 w-75 mx-auto p-3 shadow "><br />
+    <div class="form-group row">
+        <div class="col-md-2">
+            <label asp-for="FirsName"></label><br /><br />
+            <label asp-for="LastName"></label><br /><br />
+            <label asp-for="Title"></label><br /><br />
+            <label asp-for="City"></label><br /><br />
+            <label asp-for="Adress"></label><br /><br />
+            <label asp-for="BirthDate"></label><br />
+        </div>
+        <div class="col-md-9">
+            <input asp-for="FirsName" /> <br />
+            <span asp-validation-for="FirsName" style="color:red"></span><br />
+            <input asp-for="LastName" /> <br />
+            <span asp-validation-for="LastName" style="color:red"></span><br />
+            <input asp-for="Title" /> <br /><br />
+            <input asp-for="City" /> <br /><br />
+            <input asp-for="Adress" /> <br /><br />
+            <input asp-for="BirthDate" /> <br />
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" name="Add" class="btn btn-warning" value="Ekle" />
+    </div>
+
+</form>
