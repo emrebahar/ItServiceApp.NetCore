@@ -4,29 +4,59 @@
 *@
 @{
 }
-<h2 style="color:red; text-align:center">Product</h2>
+<h2 style="color:black; text-align:center">Product</h2>
+<h2>Toplam Kayıt :  @Model.Count</h2>
 <div class="container">
     <div class="row">
-        <table class="table-bordered">
-            <thead>
-                <tr>
-                    <th style="text-align:center"> CategoryName </th>
-                    <th style="text-align:center"> ProductID </th>
-                    <th style="text-align:center"> ProductName </th>
-                    <th style="text-align:center">Detail</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="col">
+            <table class="table-bordered text-center">
+                <thead>
                     <tr>
-                        <td>@item.Category.CategoryName</td>
-                        <td>@item.ProductId</td>
-                        <td>@item.ProductName</td>
-                        <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-info">Detay</a></td>
+                        <th> Kategori Adı </th>
+                        <th> Ürün Adı </th>
+                        <th> Fiyat </th>
+                        <th> Tedarikçisi </th>
+                        <th> Detay </th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Category?.CategoryName</td>
+                            <td>@item.ProductName</td>
+                            <td>@($"{item.UnitPrice:c2}")</td>
+                            <td>@(item.Supplier == null ? Html.Raw(@"<u>Tedarikçisi Yok.</u>") : item.Supplier.CompanyName)</td>
+                            <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-info">Detay</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <input type="button" value="Önceki Sayfa" class=" btn btn-success page" id="btn-onceki" />
+            @ViewBag.Page/@ViewBag.Limit
+            <input type="button" value="Sonraki Sayfa" class=" btn btn-success page" id="btn-sonraki" />
+        </div>
     </div>
 </div>
+@section Scripts
+{
+    <script>
+    var limit = @ViewBag.Limit;
+    var page = @ViewBag.Page;
+    $("#btn-onceki").click(function () {
+        if (page >1) {
+            page -= 1;
+            /*var url = "product/index?page=" + page;*/
+            var url2 = '@Url.Action("Index", "Product",new  {page =ViewBag.Page-1})';
+            window.location.href = url2;
+        }
+    });
+        $("#btn-sonraki").click(function () {
+            if (page<limit) {
+                var url2 = '@Url.Action("Index", "Product",new  {page =ViewBag.Page+1})';
+            window.location.href = url2;
+            }
+
+    });
+    </script>
+}

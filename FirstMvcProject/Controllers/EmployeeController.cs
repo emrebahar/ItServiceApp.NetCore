@@ -90,7 +90,7 @@ namespace FirstMvcProject.Controllers
                 Title = updateEmploye.Title,
                 City = updateEmploye.City,
                 Adress = updateEmploye.Address,
-                BirthDate = updateEmploye.BirthDate
+                BirthDate = Convert.ToDateTime(updateEmploye.BirthDate)
             };
             return View(model);
         }
@@ -109,7 +109,7 @@ namespace FirstMvcProject.Controllers
                 updateEmploye.Title = model.Title;
                 updateEmploye.City = model.City;
                 updateEmploye.Address = model.Adress;
-                updateEmploye.BirthDate = model.BirthDate;
+                updateEmploye.BirthDate = Convert.ToDateTime(model.BirthDate);
                 _northwindContext.Employees.Update(updateEmploye);
                 _northwindContext.SaveChanges();
                 return RedirectToAction("Detail", new { id = updateEmploye.EmployeeId });

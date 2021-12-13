@@ -1,33 +1,44 @@
-﻿@model Product
+﻿@model ProductViewModel
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
 }
-<h2 style="color:red; text-align:center">Product Detail</h2>
+<h2 style="text-align:center">Product Detail</h2>
+    <a asp-controller="Product" asp-action="Create" class="btn btn-success">Create</a>
+    <a asp-controller="Product" asp-action="Update" asp-route-id="@Model.ProductId" class="btn btn-warning">Update</a>
+    <a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.ProductId" class="btn btn-danger">Delete</a><br />
 <div class="container">
     <div class="row">
-        <table class="table-bordered ">
+        <table class="table-bordered text-center">
             <thead>
                 <tr>
-                    <th>< ProductID ></th>
-                    <th>< ProductName ></th>
-                    <th>< QuantitiyPerUnit ></th>
-                    <th>< UnitPrice ></th>
+                    <th>Ürün Adı</th>
+                    <th>Kategori Adı</th>
+                    <th>Tedarikçisi</th>
+                    <th> Birim Fiyatı </th>
+
                 </tr>
             </thead>
             <tbody style="text-align:center">
                 <tr>
-                    <td>@Model.ProductId</td>
                     <td>@Model.ProductName</td>
-                    <td>@Model.QuantityPerUnit</td>
-                    <td>@Model.UnitPrice</td>
+                    <td>@(Model.CategoryId == null ? Html.Raw( @"<u>Kategorisi Yok.</u>") :  Model.CategoryName)</td>
+                    <td>@(Model.SupplierId == null ? Html.Raw( @"<u>Tedarikçisi Yok.</u>") :  Model.CompanyName)</td>
+                    <td>@($"{Model.UnitPrice:c2}")</td>
                 </tr>
             </tbody>
         </table>
     </div>
     <br />
-    <div class="col-2">
-        <a asp-controller="Category" asp-action="Detail" asp-route-id="@Model.CategoryId" class="btn btn-danger">Geri</a>
+    <div class="row">
+        <div class="col-2">
+            <a asp-controller="Product" asp-action="Index" asp-route-id="@Model.CategoryId" class="btn btn-danger">Product Geri Dön</a>
+
+        </div>
+        <div class="col-4">
+            <a asp-controller="Category" asp-action="Detail" asp-route-id="@Model.CategoryId" class="btn btn-danger">Category Geri Dön</a>
+        </div>
     </div>
+
 </div>
