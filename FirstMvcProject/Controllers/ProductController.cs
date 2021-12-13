@@ -146,6 +146,8 @@ namespace FirstMvcProject.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
                 return View(model);
             }
             var createProduct = new Product()
