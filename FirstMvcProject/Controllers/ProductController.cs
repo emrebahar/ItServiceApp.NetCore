@@ -119,30 +119,56 @@ namespace FirstMvcProject.Controllers
             }
 
         }
-        public IActionResult Delete(int id)
+        public IActionResult Delete(int? id)
         {
-            var deleteProduct = _northwindContext.Products.FirstOrDefault(x => x.ProductId==id);
+            var deleteProduct = _northwindContext.Products.FirstOrDefault(x => x.ProductId == id);
             try
             {
                 _northwindContext.Products.Remove(deleteProduct);
                 _northwindContext.SaveChanges();
-                
+
             }
             catch (Exception)
             {
-                return RedirectToAction("Detail",new {id =id });
+                return RedirectToAction("Detail", new { id = id });
             }
-            //TempData["Silinen Ürün"]
-            return View();
+            TempData["SilinenÜrün"] = $"{deleteProduct.ProductName} isimli ürün başarıyla Silinmiştir.";
+            return RedirectToAction("Index");
         }
         public IActionResult Create()
         {
+            ViewBag.CategoryList = GetCategoryList();
+            ViewBag.SupplierList = GetSupplierList();
             return View();
         }
         [HttpPost]
         public IActionResult Create(ProductViewModel model)
         {
-            return View(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var createProduct = new Product()
+            {
+                ProductName = model.ProductName,
+                SupplierId = model.SupplierId,
+                CategoryId = model.CategoryId,
+                UnitPrice = model.UnitPrice
+            };
+            _northwindContext.Products.Add(createProduct);
+            try
+            {
+                _northwindContext.SaveChanges();
+                TempData["Message"] = $"{createProduct.ProductName} isimli ürün başarıyla Eklenmiştir.";
+                return RedirectToAction("Detail",new {id =createProduct.ProductId });
+            }
+            catch (Exception)
+            {
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
+                ModelState.AddModelError(string.Empty, $"{model.ProductName} eklenirken bir hata oluştu Tekrar deneyiniz.");
+                return View(model);
+            }
         }
         private List<SelectListItem> GetCategoryList()
         {
