@@ -1,13 +1,11 @@
 ﻿@model ProductViewModel
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+<div class="bg-info">@TempData["Message"]</div>
 <h2 style="text-align:center">Product Detail</h2>
-    <a asp-controller="Product" asp-action="Create" class="btn btn-success">Create</a>
-    <a asp-controller="Product" asp-action="Update" asp-route-id="@Model.ProductId" class="btn btn-warning">Update</a>
-    <a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.ProductId" class="btn btn-danger">Delete</a><br />
+<a asp-controller="Product" asp-action="Create" class="btn btn-success">Create</a>
+<a asp-controller="Product" asp-action="Update" asp-route-id="@Model.ProductId" class="btn btn-warning">Update</a>
+@*<a asp-controller="Product" asp-action="Delete" asp-route-id="@Model.ProductId" class="btn btn-danger">Delete</a>*@
+<input type="button" class="btn btn-danger" value="Sil!" data-toggle="modal" data-target="#confirm-delete" />
+<br />
 <div class="container">
     <div class="row">
         <table class="table-bordered text-center">
@@ -40,5 +38,36 @@
             <a asp-controller="Category" asp-action="Detail" asp-route-id="@Model.CategoryId" class="btn btn-danger">Category Geri Dön</a>
         </div>
     </div>
-
 </div>
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Silme Onayı</h4>
+            </div>
+
+            <div class="modal-body">
+                <p>Ürün Silinecektir. Bu işlemin geri dönüşü yoktur.</p>
+                <p>Emin misiniz ?</p>
+                <p class="debug-url"></p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Vazgeç</button>
+                <a class="btn btn-danger btn-ok">SİL</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        $('#confirm-delete').on('show.bs.modal', function (e) {
+            $(this).find('.btn-ok').attr('href', '@Url.Action("Delete","Product",new { id=Model.ProductId})');
+        });
+    </script>
+
+}

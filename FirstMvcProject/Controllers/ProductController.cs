@@ -78,28 +78,9 @@ namespace FirstMvcProject.Controllers
                 SupplierId = product.SupplierId,
                 CompanyName = product.Supplier?.CompanyName,
                 UnitPrice = product.UnitPrice
-
             };
-            var categories = _northwindContext.Categories.OrderBy(x => x.CategoryName);
-            var suppliers = _northwindContext.Suppliers.OrderBy(x => x.CompanyName);
-
-            var categoryList = new List<SelectListItem>()
-            {
-            new SelectListItem("Kategori Yok", null)
-            };
-
-            foreach (var category in categories)
-            {
-                categoryList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
-            }
-
-            var supplierList = new List<SelectListItem>() { new SelectListItem("Tedarikçi Yok", null) };
-            foreach (var supplier in suppliers)
-            {
-                supplierList.Add(new SelectListItem(supplier.CompanyName, supplier.SupplierId.ToString()));
-            }
-            ViewBag.CategoryList = categoryList;
-            ViewBag.SupplierList = supplierList;
+            ViewBag.CategoryList = GetCategoryList();
+            ViewBag.SupplierList = GetSupplierList();
             return View(model);
         }
         [HttpPost]
@@ -107,11 +88,14 @@ namespace FirstMvcProject.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
                 return View(model);
             }
             var updateProduct = _northwindContext.Products.FirstOrDefault(x => x.ProductId == model.ProductId);
             if (updateProduct == null)
             {
+
                 return RedirectToAction("Index");
             }
 
@@ -128,10 +112,28 @@ namespace FirstMvcProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewBag.CategoryList = GetCategoryList();
+                ViewBag.SupplierList = GetSupplierList();
                 ModelState.AddModelError(string.Empty, ex.Message);
                 return View(model);
             }
-            
+
+        }
+        public IActionResult Delete(int id)
+        {
+            var deleteProduct = _northwindContext.Products.FirstOrDefault(x => x.ProductId==id);
+            try
+            {
+                _northwindContext.Products.Remove(deleteProduct);
+                _northwindContext.SaveChanges();
+                
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Detail",new {id =id });
+            }
+            //TempData["Silinen Ürün"]
+            return View();
         }
         public IActionResult Create()
         {
@@ -141,6 +143,32 @@ namespace FirstMvcProject.Controllers
         public IActionResult Create(ProductViewModel model)
         {
             return View(model);
+        }
+        private List<SelectListItem> GetCategoryList()
+        {
+            var categories = _northwindContext.Categories.OrderBy(x => x.CategoryName);
+            var categoryList = new List<SelectListItem>()
+            {
+            new SelectListItem("Kategori Yok", null)
+            };
+
+            foreach (var category in categories)
+            {
+                categoryList.Add(new SelectListItem(category.CategoryName, category.CategoryId.ToString()));
+            }
+            return categoryList;
+        }
+        private List<SelectListItem> GetSupplierList()
+        {
+            var suppliers = _northwindContext.Suppliers.OrderBy(x => x.CompanyName);
+            var supplierList = new List<SelectListItem>() { new SelectListItem("Tedarikçi Yok", null) };
+            foreach (var supplier in suppliers)
+            {
+                supplierList.Add(new SelectListItem(supplier.CompanyName, supplier.SupplierId.ToString()));
+            }
+
+            ViewBag.SupplierList = supplierList;
+            return supplierList;
         }
     }
 }
