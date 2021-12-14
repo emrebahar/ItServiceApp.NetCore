@@ -1,7 +1,7 @@
 ﻿@model CategoryViewModel
 
 
-<form asp-action="Create" asp-controller="Category" method="post" class="mt-3 w-75 mx-auto p-3 shadow ">
+<form id="frm-add">
     <div class="form-group row">
         <div class="col-md-2">
             <label asp-for="CategoryName"></label><br /><br /><br />
@@ -16,6 +16,37 @@
     <div class="form-group">
         <input type="submit" name="Add" class="btn btn-warning" value="Ekle" />
     </div>
-
 </form>
+
+@section Scripts{
+
+    <script>
+        $(function () {
+            $("#frm-add").submit(function(e) {
+                e.preventDefault();
+                var model = {
+                    "categoryName": $("#CategoryName").val(),
+                    "description": $("#Description").val()
+                };
+                console.log(model);
+                $.ajax({
+                    "headers": {
+                        "Content-Type": "application/json;"
+                    },
+                    url: '@Url.Action("AddCategory","CategoryApi")',
+                    type: "POST",
+                    data: JSON.stringify(model),
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (request, status, error) {
+                        console.log(request.responseText);
+                    }
+                }).fail;
+
+            });
+        })
+    </script>
+}
 

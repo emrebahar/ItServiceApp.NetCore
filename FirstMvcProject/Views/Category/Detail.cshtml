@@ -14,12 +14,12 @@
 
 <div class="row">
     <div class="col-6">
-        <table class="table-bordered">
+        <table class="table-bordered text-center">
             <thead>
                 <tr>
+                    <th>Kategori Adı</th>
                     <th>Ürün Adı</th>
                     <th>Fiyat</th>
-                    <th>Kategori Adı</th>
                     <th>Siparişleri</th>
                     <th>Hacim</th>
                     <th>Detay</th>
@@ -28,21 +28,21 @@
             <tbody>
                 @foreach (var item in Model.Products)
                 {
-                    <tr>
-                        <td>@item.ProductName</td>
-                        <td>@item.UnitPrice</td>
-                        <td>@item.Category.CategoryName</td>
-                        <td>@item.OrderDetails.Count</td>
-                        <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
-                        <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-info">Detay</a></td>
-                    </tr>
+                <tr>
+                    <td>@item.Category.CategoryName</td>
+                    <td>@item.ProductName</td>
+                    <td>@($"{item.UnitPrice:c2}")</td>
+                    <td>@item.OrderDetails.Count</td>
+                    <td>@item.OrderDetails.Sum(x => x.UnitPrice * x.Quantity * (decimal)(1 - x.Discount))</td>
+                    <td><a asp-controller="Product" asp-action="Detail" asp-route-id="@item.ProductId" class="btn btn-block btn-info">Detay</a></td>
+                </tr>
                 }
             </tbody>
         </table>
     </div>
 </div>
-<div class="container">
-    <div class="col-2">
+<div class="row">
+    <div class="col-2 mt-2">
         <a asp-controller="Category" asp-action="Index" class="btn btn-group btn-danger">Geri</a>
     </div>
 </div>
