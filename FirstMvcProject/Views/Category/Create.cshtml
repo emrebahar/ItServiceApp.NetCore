@@ -4,12 +4,12 @@
 <form id="frm-add">
     <div class="form-group row">
         <div class="col-md-2">
-            <label asp-for="CategoryName"></label><br /><br /><br />
+            <label asp-for="CategoryName"></label><br /><br />
             <label asp-for="Description"></label>
         </div>
         <div class="col-md-9">
             <input asp-for="CategoryName" /> <br />
-            <span asp-validation-for="CategoryName" style="color:red"></span><br /><br />
+            <span asp-validation-for="CategoryName" style="color:red"></span><br />
             <input asp-for="Description" /> <br />
         </div>
     </div>
@@ -29,6 +29,7 @@
                     "description": $("#Description").val()
                 };
                 console.log(model);
+                var categoryDetailUrl = '@Url.Action("Detail" , "Category")';
                 $.ajax({
                     "headers": {
                         "Content-Type": "application/json;"
@@ -38,7 +39,9 @@
                     data: JSON.stringify(model),
                     dataType: "json",
                     success: function (response) {
-                        console.log(response);
+                        alert(response.message);
+                        window.location.href = `${categoryDetailUrl}/${response.model.categoryId}`; //1. Yazım Şekli
+                        /*window.location.href = categoryDetailUrl + '/' + response.model.categoryId;*/ //2. Yazım Şekli
                     },
                     error: function (request, status, error) {
                         console.log(request.responseText);

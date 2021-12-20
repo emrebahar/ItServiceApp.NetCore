@@ -17,7 +17,7 @@ namespace FirstMvcProject.Controllers
         {
             _northwindContext = northwindContext;
         }
-        private int _pageSize = 10;
+        private readonly int _pageSize = 10;
         public IActionResult Index(int? page = 1)
         {
             var data = _northwindContext.Products

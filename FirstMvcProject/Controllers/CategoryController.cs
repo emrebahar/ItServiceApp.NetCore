@@ -63,7 +63,7 @@ namespace FirstMvcProject.Controllers
                 _northwindContext.SaveChanges();
                 return RedirectToAction("Detail", new { id = category.CategoryId });
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 ModelState.AddModelError(string.Empty, $"{model.CategoryName} eklenirken bir hata oluştu Tekrar deneyiniz.");
                 return View(model);
