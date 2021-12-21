@@ -1,0 +1,24 @@
+﻿@*
+	view imports
+*@
+
+@model List<Product>
+@*
+	View Starts
+*@
+
+<title></title>
+@foreach (var item in Model)
+{
+	<p>
+		@item.Id - @item.Name - @($"{item.UnitPrice:c2}")
+	</p>
+}
+@section Scripts{
+<script>
+	App.name = "Kamil ";
+	console.log(App.selamla());
+</script>
+}
+
+
