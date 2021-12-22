@@ -8,6 +8,7 @@ namespace ItServiceApp.Data
 	{
 		public MyContext(DbContextOptions options):base(options)
 		{
+
 		}
 	}
 }
