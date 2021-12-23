@@ -5,6 +5,7 @@ namespace ItServiceApp.ViewModels
 	public class RegisterViewModel
 	{
 		[Required(ErrorMessage = " Kullanıcı Adı alanı gereklidir.")]
+		[Display(Name = "Kullanıcı Adı")]
 		public string UserName { get; set; }
 		[Required(ErrorMessage ="isim alanı gereklidir.")]
 		[Display(Name ="Ad")]

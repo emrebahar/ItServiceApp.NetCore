@@ -48,16 +48,15 @@ namespace ItServiceApp
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<MyContext>();
+            services.ConfigureApplicationCookie(options =>
+            {
+                //Cookie Settings.
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                services.ConfigureApplicationCookie(options =>
-                {
-                    //Cookie Settings.
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-
-                    options.LoginPath = "/Account/Login";
-                    options.AccessDeniedPath = "/Account/AccessDenied";
-                    options.SlidingExpiration = true;
-                });
+                options.LoginPath = "/Account/Login";
+                options.AccessDeniedPath = "/Account/AccessDenied";
+                options.SlidingExpiration = true;
             });
         }
 
@@ -68,11 +67,13 @@ namespace ItServiceApp
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            
+            app.UseAuthentication();
             app.UseRouting();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

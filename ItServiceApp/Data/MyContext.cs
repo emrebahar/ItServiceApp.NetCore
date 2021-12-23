@@ -6,7 +6,7 @@ namespace ItServiceApp.Data
 {
 	public class MyContext : IdentityDbContext<ApplicationUser,ApplicationRole,string>
 	{
-		public MyContext(DbContextOptions options):base(options)
+		public MyContext(DbContextOptions<MyContext> options):base(options)
 		{
 
 		}
