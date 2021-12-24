@@ -1,5 +1,6 @@
 using ItServiceApp.Data;
 using ItServiceApp.Models.Identity;
+using ItServiceApp.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,8 +26,6 @@ namespace ItServiceApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
-
             services.AddDbContext<MyContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("SqlConnection"));
@@ -58,6 +57,9 @@ namespace ItServiceApp
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
+            services.AddTransient<IEmailSender,EmailSender>();
+
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,10 +72,10 @@ namespace ItServiceApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
-            app.UseAuthentication();
+
             app.UseRouting();
-            app.UseAuthorization();
+            app.UseAuthentication(); //Login Logout kullanabilmek için.
+            app.UseAuthorization(); //Authorization attiribute kullanabilmek için.
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

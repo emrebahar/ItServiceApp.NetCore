@@ -4,21 +4,13 @@
 }
 
 <!--====== Page Title start ======-->
-<section class="page-title-area">
-	<div class="container">
-		<h2 class="title">Checkout</h2>
-		<ul class="breadcrumb-nav">
-			<li><a asp-controller="Home" asp-action="Index">Home</a></li>
-			<li class="active">@ViewBag.Title</li>
-		</ul>
-	</div>
-</section>
+<partial name="Partials/_PageTitlePartial" />
 <!--====== Page Title End ======-->
 <!--====== Shoping Checkout Start  ======-->
 <section class="shoping-checkout-area section-gap">
 	<div class="container">
 		<div class="user-actions mb-40">
-			<p>Returning customer? <a href="#">Click here to login</a></p>
+			<p>Hesabınız yoksa  <a asp-controller="Account" asp-action="Register">Hesap açmak için tıklayınız.</a></p>
 		</div>
 		<form asp-controller="Account" asp-action="Login" method="post">
 			<div class="row">
@@ -26,25 +18,28 @@
 					<div class="billing-details">
 						<h3 class="title">Giriş Formu</h3>
 						<div class="row">
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="form-group">
 									<label asp-for="UserName"> </label>
 									<input asp-for="UserName" />
 									<span asp-validation-for="UserName"></span>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="form-group">
 									<label asp-for="Password"> </label>
 									<input asp-for="Password" />
 									<span asp-validation-for="Password"></span>
 								</div>
 							</div>
-							<div class="col-lg-6">
+							<div class="col-lg-4">
 								<div class="form-group">
-									<input type="checkbox" class="custom-checkbox" value="Beni Hatırla" />
+									<label asp-for="RememberMe"> </label>
+									<input asp-for="RememberMe" type="checkbox" />
 								</div>
 							</div>
+							<div class="col-md-4"></div>
+
 							<div class="col-md-4">
 								<div class="payment-box mt-38">
 									<input type="submit" class="main-btn" value="Giriş Yap" />

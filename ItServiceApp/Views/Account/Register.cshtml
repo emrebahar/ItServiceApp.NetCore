@@ -1,24 +1,16 @@
 ﻿@model RegisterViewModel
 @{
-	ViewBag.Title = "Kayıt Ol";
+	ViewBag.Title = "Kayıt Sayfası";
 }
 
 <!--====== Page Title start ======-->
-<section class="page-title-area">
-	<div class="container">
-		<h2 class="title">Checkout</h2>
-		<ul class="breadcrumb-nav">
-			<li><a asp-controller="Home" asp-action="Index">Home</a></li>
-			<li class="active">@ViewBag.Title</li>
-		</ul>
-	</div>
-</section>
+<partial name="Partials/_PageTitlePartial" />
 <!--====== Page Title End ======-->
 <!--====== Shoping Checkout Start  ======-->
 <section class="shoping-checkout-area section-gap">
 	<div class="container">
 		<div class="user-actions mb-40">
-			<p>Returning customer? <a href="#">Click here to login</a></p>
+			<p>Hesabınız varsa <a asp-controller="Account" asp-action="Login">Giriş için tıklayınız.</a></p>
 		</div>
 		<form asp-controller="Account" asp-action="Register" method="post">
 			<div class="row">

@@ -1,4 +1,4 @@
-﻿
+﻿@inject SignInManager<ApplicationUser> SignInManager
 
 <header class="header-one sticky-header">
 	<div class="header-navigation">
@@ -7,7 +7,18 @@
 				<div class="site-logo">
 					<a href="index.html"><img src="~/assets/img/logo.png" alt="Omnivus"></a>
 				</div>
+
 			</div>
+			@if (SignInManager.IsSignedIn(Context.User))
+			{
+
+				@if (@User.IsInRole("Admin"))
+				{
+					<div>
+						<h2>Admin Sayfası</h2>
+					</div>
+				}
+			}
 			<div class="header-right d-flex align-items-center justify-content-end">
 				<div class="site-nav-menu">
 					<ul class="primary-menu">
@@ -98,8 +109,19 @@
 					<div class="nav-toggler">
 						<span></span><span></span><span></span>
 					</div>
-					@if (User.Identity.IsAuthenticated)
+					@if (SignInManager.IsSignedIn(Context.User))
 					{
+						<div class="btn-2">
+							<ul class="primary-menu">
+								<li>
+									<a href="#">@User.Identity.Name</a>
+									<ul class="submenu">
+										<li><a>Profilim</a></li>
+										<li><a>Siparişlerim</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
 						<div class="navbar-btn">
 							<a asp-controller="Account" asp-action="Logout">Çıkış Yap<i class="fal fa-long-arrow-									right"></i></a>
 						</div>
