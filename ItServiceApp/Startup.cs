@@ -48,7 +48,7 @@ namespace ItServiceApp
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedEmail = true; // Emailden gelen doðrulamayý onaylamayan kiþileri sisteme kayýt edilmez.  
+                /*options.SignIn.RequireConfirmedEmail = true;*/ // Emailden gelen doðrulamayý onaylamayan kiþileri sisteme giremez.  
             }).AddEntityFrameworkStores<MyContext>().AddDefaultTokenProviders();
             services.ConfigureApplicationCookie(options =>
             {

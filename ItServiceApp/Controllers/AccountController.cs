@@ -1,4 +1,5 @@
-﻿using ItServiceApp.Models;
+﻿using ItServiceApp.Extensions;
+using ItServiceApp.Models;
 using ItServiceApp.Models.Identity;
 using ItServiceApp.Services;
 using ItServiceApp.ViewModels;
@@ -6,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using System;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -126,7 +126,7 @@ namespace ItServiceApp.Controllers
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
             ViewBag.StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
-            if (result.Succeeded && _userManager.IsInRoleAsync(user, RoleModels.Passive).Result) 
+            if (result.Succeeded && _userManager.IsInRoleAsync(user, RoleModels.Passive).Result)
             {
                 await _userManager.RemoveFromRoleAsync(user, RoleModels.Passive);
                 await _userManager.AddToRoleAsync(user, RoleModels.User);
@@ -174,5 +174,84 @@ namespace ItServiceApp.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        [Authorize] // Kesin Giriş yapan kullanıcı olması için.
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+            var model = new UserProfileViewModel()
+            {
+                Email = user.Email,
+                Name = user.Name,
+                SurName = user.SurName
+            };
+
+            return View(model);
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Profile(UserProfileViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+            user.Name = model.Name;
+            user.SurName = model.SurName;
+            if (user.Email != model.Email)
+            {
+                await _userManager.RemoveFromRoleAsync(user, RoleModels.User);
+                await _userManager.AddToRoleAsync(user, RoleModels.Passive);
+                user.Email = model.Email;
+
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, Request.Scheme);
+
+                var emailMessage = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'> clicking here</a>",
+                    Subject = "Confirm your email"
+                };
+                //Kullanıcıya rol atama, Email onay Maili
+                await _emailsender.SendAsync(emailMessage);
+            }
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError(string.Empty, ModelState.ToFullErrorString());
+            }
+            return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdatePassword(PasswordChangeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByIdAsync(HttpContext.GetUserId());
+
+            var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                ViewBag.Message = "Parola Güncelleme İşlemi Başarılı";
+            }
+            else
+            {
+                ViewBag.Message = $"Bir hata oluştu: {ModelState.ToFullErrorString()}";
+            }
+            return RedirectToAction(("Profile"));
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> UpdatePassword()
+        {
+            return View();
+
+        }
+
     }
 }
