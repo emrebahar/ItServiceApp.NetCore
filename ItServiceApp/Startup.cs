@@ -1,4 +1,5 @@
 using ItServiceApp.Data;
+using ItServiceApp.MapperProfiles;
 using ItServiceApp.Models.Identity;
 using ItServiceApp.Services;
 using Microsoft.AspNetCore.Builder;
@@ -59,8 +60,12 @@ namespace ItServiceApp
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-            services.AddTransient<IEmailSender,EmailSender>();
-
+            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddAutoMapper(options =>
+            {
+                options.AddProfile<PaymentProfile>();
+                //options.AddProfile(typeof(PaymentProfile)); // 2. yazým þekli.
+            });
             services.AddControllersWithViews();
         }
 

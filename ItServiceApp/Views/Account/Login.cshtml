@@ -1,6 +1,6 @@
 ﻿@model LoginViewModel
 @{
-	ViewBag.Title = "Giriş Sayfası";
+    ViewBag.Title = "Giriş Sayfası";
 }
 
 <!--====== Page Title start ======-->
@@ -8,59 +8,62 @@
 <!--====== Page Title End ======-->
 <!--====== Shoping Checkout Start  ======-->
 <section class="shoping-checkout-area section-gap">
-	<div class="container">
-		<div class="user-actions mb-40">
-			<p>Hesabınız yoksa  <a asp-controller="Account" asp-action="Register">Hesap açmak için tıklayınız.</a></p>
-		</div>
-		<form asp-controller="Account" asp-action="Login" method="post">
-			<div class="row">
-				<div class="col-lg-12">
-					<div class="billing-details">
-						<h3 class="title">Giriş Formu</h3>
-						<div class="row">
-							<div class="col-lg-4">
-								<div class="form-group">
-									<label asp-for="UserName"> </label>
-									<input asp-for="UserName" />
-									<span asp-validation-for="UserName"></span>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="form-group">
-									<label asp-for="Password"> </label>
-									<input asp-for="Password" />
-									<span asp-validation-for="Password"></span>
-								</div>
-							</div>
-							<div class="col-lg-4">
-								<div class="form-group">
-									<label asp-for="RememberMe"> </label>
-									<input asp-for="RememberMe" type="checkbox" />
-								</div>
-							</div>
-							<div class="col-md-4"></div>
+    <div class="container">
+        <div class="user-actions mb-40">
+            <p>Hesabınız yoksa  <a asp-controller="Account" asp-action="Register">Hesap açmak için tıklayınız.</a></p>
+        </div>
+        <form asp-controller="Account" asp-action="Login" method="post">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="billing-details">
+                        <h3 class="title">Giriş Formu</h3>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label asp-for="UserName"> </label>
+                                    <input asp-for="UserName" />
+                                    <span asp-validation-for="UserName"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label asp-for="Password"> </label>
+                                    <input asp-for="Password" />
+                                    <span asp-validation-for="Password"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="form-group">
+                                    <label asp-for="RememberMe"> </label>
+                                    <input asp-for="RememberMe" type="checkbox" />
+                                </div>
+                            </div>
+                            <div class="col-md-4"></div>
 
-							<div class="col-md-4">
-								<div class="payment-box mt-38">
-									<input type="submit" class="main-btn" value="Giriş Yap" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</form>
-	</div>
+                            <div class="col-md-4">
+                                <div class="payment-box mt-38">
+                                    <input type="submit" class="main-btn" value="Giriş Yap" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="user-actions mb-40">
+            <p><a asp-controller="Account" asp-action="ResetPassword">Şifremi Unuttum!</a></p>
+        </div>
+    </div>
 </section>
 <!--====== Shoping Checkout End ======-->
 @section Styles
     {
-<style>
-	input {
-		border: solid 1px #e3eeff;
-		height: 50px;
-		padding: 0 15px;
-	}
-</style>
+    <style>
+        input {
+            border: solid 1px #e3eeff;
+            height: 50px;
+            padding: 0 15px;
+        }
+    </style>
 
-    }
+}

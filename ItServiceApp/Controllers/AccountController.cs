@@ -238,20 +238,99 @@ namespace ItServiceApp.Controllers
             if (result.Succeeded)
             {
                 ViewBag.Message = "Parola Güncelleme İşlemi Başarılı";
+                return RedirectToAction(nameof(Login));
             }
             else
             {
                 ViewBag.Message = $"Bir hata oluştu: {ModelState.ToFullErrorString()}";
             }
-            return RedirectToAction(("Profile"));
+            return RedirectToAction(nameof(UpdatePassword));
         }
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> UpdatePassword()
+        public IActionResult UpdatePassword()
         {
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ViewBag.Message = "Girdiğiniz email bulunamadı";
+            }
+            else
+            {
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                var callbackUrl = Url.Action("ConfirmResetPassword", "Account", new { UserId = user.Id, code = code },
+                    protocol: Request.Scheme);
+
+                var emailMessage = new EmailMessage()
+                {
+                    Contacts = new string[] { user.Email },
+                    Body = $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Clisck Here</a>",
+                    Subject = "Reset Password"
+                };
+                await _emailsender.SendAsync(emailMessage);
+                ViewBag.Message = "Mailinize Şifre güncelleme yönergemiz gönderilmiştir";
+            }
+            return View();
+        }
+
+        [AllowAnonymous]
+        public IActionResult ConfirmResetPassword(string UserId, string code)
+        {
+            if (string.IsNullOrEmpty(UserId) || string.IsNullOrEmpty(code))
+            {
+                return BadRequest("Hatalı İstek");
+            }
+            ViewBag.Code = code;
+            ViewBag.UserId = UserId;
+
             return View();
 
         }
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<IActionResult> ConfirmResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                ModelState.AddModelError(string.Empty, "Kullanıcı Bulunamadı");
+                return View();
+            }
+            var code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(model.Code));
 
+            var result = await _userManager.ResetPasswordAsync(user, code, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                //Email Gönder
+                TempData["Message"] = "Şifre değişikliğiniz gerçekleştirilmiştir";
+                ViewBag.Message = "Başarılı";
+                return View();
+            }
+            else
+            {
+                var message = string.Join("</br>", result.Errors.Select(x => x.Description));
+                TempData["Message"] = message;
+                ViewBag.Message = "Başarısız";
+                return View();
+            }
+        }
     }
 }
