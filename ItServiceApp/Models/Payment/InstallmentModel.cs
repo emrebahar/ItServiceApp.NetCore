@@ -7,7 +7,7 @@ namespace ItServiceApp.Models.Payment
 {
     public class InstallmentModel
     {
-        public string BindNumber { get; set; }
+        public string BinNumber { get; set; }
         public int Commercial { get; set; }
         public string Price { get; set; }
         public string CardType { get; set; }

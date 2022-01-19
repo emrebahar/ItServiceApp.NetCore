@@ -60,7 +60,8 @@ namespace ItServiceApp
                 options.AccessDeniedPath = "/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSender, EmailSender>();  // Loose coupling -- Gevþek Bað
+            services.AddScoped<IPaymentService, IyzicoPaymentService>();  // Loose coupling -- Gevþek Bað
             services.AddAutoMapper(options =>
             {
                 options.AddProfile<PaymentProfile>();

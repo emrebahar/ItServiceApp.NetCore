@@ -8,7 +8,7 @@ namespace ItServiceApp.Services
 {
     public interface IPaymentService
     {
-        public InstallmentModel CheckInstallments(string binNumber,decimal price);
-        public PaymentResponseModel Pay(PaymentModel model);
+        InstallmentModel CheckInstallments(string binNumber,decimal price);
+        PaymentResponseModel Pay(PaymentModel model);
     }
 }
