@@ -86,10 +86,16 @@ namespace ItServiceApp
             app.UseAuthorization(); //Authorization attiribute kullanabilmek için.
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                    areaName: "Admin",
+                    name: "Admin",
+                    pattern: "Admin/{controller=Manage}/{action=Index}/{id?}"
+                    );
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}"
                     );
+
             });
         }
     }

@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using ItServiceApp.Models.Identity;
 using ItServiceApp.Models.Payment;
 using Iyzipay.Model;
 using Iyzipay.Request;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using MUsefulMethods;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -16,10 +19,12 @@ namespace ItServiceApp.Services
         private readonly IConfiguration _configuration;
         private readonly IyzicoPaymentOptions _options;
         private readonly IMapper _mapper;
-        public IyzicoPaymentService(IConfiguration configuration, IMapper mapper)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public IyzicoPaymentService(IConfiguration configuration, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             _configuration = configuration;
             _mapper = mapper;
+            _userManager = userManager;
             var section = _configuration.GetSection(IyzicoPaymentOptions.Key);
             _options = new IyzicoPaymentOptions()
             {
@@ -29,7 +34,66 @@ namespace ItServiceApp.Services
                 ThreedsCallbackUrl = section["ThreedsCallbackUrl"]
             };
         }
+        private CreatePaymentRequest InitialPaymentRequest(PaymentModel model)
+        {
+            var paymentRequest = new CreatePaymentRequest
+            {
+                Installment = model.Installment,
+                Locale = Locale.TR.ToString(),
+                ConversationId = GenerateConversationId(),
+                Price = model.Price.ToString(new CultureInfo("en-US")),
+                PaidPrice = model.PaidPrice.ToString(new CultureInfo("en-US")),
+                Currency = Currency.TRY.ToString(),
+                BasketId = StringHelpers.GenerateUniqueCode(),
+                PaymentChannel = PaymentChannel.WEB.ToString(),
+                PaymentGroup = PaymentGroup.SUBSCRIPTION.ToString(),
+                PaymentCard = _mapper.Map<PaymentCard>(model.CardModel)
+            };
+            var user = _userManager.FindByIdAsync(model.UserId).Result;
 
+            var buyer = new Buyer
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Surname = user.SurName,
+                GsmNumber = user.PhoneNumber,
+                Email = user.Email,
+                IdentityNumber = "11111111110",
+                LastLoginDate = $"{DateTime.Now:yyyy-MM-dd HH:mm:ss}",
+                RegistrationDate = $"{user.CreatedDate:yyyy-MM-dd HH:mm:ss}",
+                RegistrationAddress = "Cihannuma Mah. Barbaros Bulvarı No:9 Beşiktaş",
+                Ip = model.Ip,
+                City = "İstanbul",
+                Country = "Turkey",
+                ZipCode = "34732"
+            };
+            paymentRequest.Buyer = buyer;
+
+            var billingAddress = new Address
+            {
+                ContactName = $"{user.Name} {user.SurName}",
+                City ="İstanbul",
+                Country ="Turkey",
+                Description = "Cihannuma Mah. Barbaros Bulvarı No:9 Beşiktaş",
+                ZipCode = "34742"
+            };
+            paymentRequest.BillingAddress = billingAddress;
+
+            var basketItems = new List<BasketItem>();
+            var firstBasketItem = new BasketItem
+            {
+                Id = "B101",
+                Name = "Binocular",
+                Category1 = "Collectibles",
+                Category2 = "Accessories",
+                ItemType = BasketItemType.VIRTUAL.ToString(),
+                Price = model.Price.ToString(new CultureInfo("en-US"))
+            };
+            basketItems.Add(firstBasketItem);
+            paymentRequest.BasketItems = basketItems;
+
+            return paymentRequest;
+        }
         private string GenerateConversationId()
         {
             return MUsefulMethods.StringHelpers.GenerateUniqueCode();
@@ -63,7 +127,11 @@ namespace ItServiceApp.Services
 
         public PaymentResponseModel Pay(PaymentModel model)
         {
-            return null;
-        }
+            var request = InitialPaymentRequest(model);
+
+            var payment = Payment.Create(request, _options);
+
+            return _mapper.Map<PaymentResponseModel>(payment);
+;        }
     }
 }

@@ -3,11 +3,10 @@
 <header class="header-one sticky-header">
 	<div class="header-navigation">
 		<div class="container-fluid d-flex align-items-center justify-content-between container-1470">
-			<div class="header-left">
+			<div class="header-left row">
 				<div class="site-logo">
 					<a href="index.html"><img src="~/assets/img/logo.png" alt="Omnivus"></a>
 				</div>
-
 			</div>
 			@if (SignInManager.IsSignedIn(Context.User))
 			{
@@ -15,7 +14,7 @@
 				@if (@User.IsInRole("Admin"))
 				{
 					<div>
-						<h2>Admin Sayfası</h2>
+						<h3>Admin Sayfası</h3>
 					</div>
 				}
 			}
@@ -119,6 +118,7 @@
 										<li><a asp-action="Profile" asp-controller="Account">Profilim</a></li>
 										<li><a asp-action="UpdatePassword" asp-controller="Account">Şifre İşlemleri</a></li>
 										<li><a>Siparişlerim</a></li>
+										<li><a asp-action="Index" asp-controller="Admin">Admin Sayfası</a></li>
 									</ul>
 								</li>
 							</ul>

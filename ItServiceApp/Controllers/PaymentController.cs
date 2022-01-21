@@ -2,12 +2,14 @@
 using ItServiceApp.Models.Payment;
 using ItServiceApp.Services;
 using ItServiceApp.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ItServiceApp.Controllers
 {
+    [Authorize]
     public class PaymentController : Controller
     {
         private readonly IPaymentService _paymentService;
@@ -37,7 +39,7 @@ namespace ItServiceApp.Controllers
                 Address = new AddressModel(),
                 BasketList = new List<BasketModel>(),
                 Customer = new CustomerModel(),
-                CardModel = new CardModel(),
+                CardModel = model.CardModel,
                 Price = 1000,
                 UserId = HttpContext.GetUserId(),
                 Ip = Request.HttpContext.Connection.RemoteIpAddress?.ToString()

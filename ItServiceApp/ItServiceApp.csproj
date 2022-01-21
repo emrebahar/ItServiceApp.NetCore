@@ -18,4 +18,9 @@
     <PackageReference Include="UsefulMethods" Version="1.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+  </ItemGroup>
+
 </Project>
