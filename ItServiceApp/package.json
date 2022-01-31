@@ -1,0 +1,27 @@
+{
+  "name": "itserviceapp",
+  "version": "1.0.0",
+  "description": "ITService Uygulaması",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emrebahar/FirstMvcProject.git"
+  },
+  "author": "Emre Bahar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/emrebahar/FirstMvcProject/issues"
+  },
+  "homepage": "https://github.com/emrebahar/FirstMvcProject#readme",
+  "dependencies": {
+    "devextreme": "^21.2.5",
+    "devextreme-aspnet-data": "^2.8.6",
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
+    "jquery": "^3.6.0",
+    "jszip": "^3.7.1"
+  }
+}
