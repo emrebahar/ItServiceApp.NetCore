@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,7 +56,7 @@ namespace ItServiceApp
             services.ConfigureApplicationCookie(options =>
             {
                 //Cookie Settings.
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(120);
 
                 options.LoginPath = "/Account/Login";
                 options.AccessDeniedPath = "/Account/AccessDenied";
@@ -80,8 +82,14 @@ namespace ItServiceApp
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"node_modules")),
+                RequestPath = new PathString("/vendor")
+            }); // Node_modules klasörünü static yapmak için.(wwwroot klasörüne atmak için).
 
             app.UseRouting();
+
             app.UseAuthentication(); //Login Logout kullanabilmek için.
             app.UseAuthorization(); //Authorization attiribute kullanabilmek için.
             app.UseEndpoints(endpoints =>
