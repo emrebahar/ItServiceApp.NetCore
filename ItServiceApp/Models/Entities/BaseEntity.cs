@@ -7,7 +7,7 @@ namespace ItServiceApp.Models.Entities
     {
          [Key]
         public Guid Id { get; set; }= Guid.NewGuid();
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
         [StringLength(128)]
         public string CreatedUser { get; set; }
         public DateTime? UpdatedDate{ get; set; }

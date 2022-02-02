@@ -15,5 +15,10 @@ namespace ItServiceApp.Areas.Admin.Controllers
         {
             return View();
         }
+
+        public IActionResult SubscriptionTypes()
+        {
+            return View();
+        }
     }
 }
