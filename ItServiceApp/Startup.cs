@@ -66,6 +66,7 @@ namespace ItServiceApp
             {
                 options.AddProfile<PaymentProfile>();
                 //options.AddProfile(typeof(PaymentProfile)); // 2. yazým þekli.
+                options.AddProfile(typeof(EntityProfile));
             });
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(

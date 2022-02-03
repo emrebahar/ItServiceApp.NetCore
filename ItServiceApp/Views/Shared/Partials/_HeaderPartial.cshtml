@@ -5,7 +5,7 @@
 		<div class="container-fluid d-flex align-items-center justify-content-between container-1470">
 			<div class="header-left row">
 				<div class="site-logo">
-					<a href="index.html"><img src="~/assets/img/logo.png" alt="Omnivus"></a>
+					<a asp-action="Index" asp-controller="Home"><img src="~/assets/img/logo.png" alt="Omnivus"></a>
 				</div>
 			</div>
 			@if (SignInManager.IsSignedIn(Context.User))
