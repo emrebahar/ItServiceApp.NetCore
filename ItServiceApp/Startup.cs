@@ -45,12 +45,13 @@ namespace ItServiceApp
                 options.Lockout.MaxFailedAccessAttempts = 3;
                 options.Lockout.AllowedForNewUsers = true;
 
-                //USer Settings.
+                //User Settings.
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
                 /*options.SignIn.RequireConfirmedEmail = true;*/ // Emailden gelen doðrulamayý onaylamayan kiþileri sisteme giremez.  
             }).AddEntityFrameworkStores<MyContext>().AddDefaultTokenProviders();
+
             services.ConfigureApplicationCookie(options =>
             {
                 //Cookie Settings.
